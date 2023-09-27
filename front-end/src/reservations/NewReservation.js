@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom/";
-
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom/";
+import { createReservation } from "../utils/api";
 
 function NewReservation(){
     const history = useHistory()
@@ -25,8 +25,12 @@ function NewReservation(){
     const handleSubmit = (event => {
         event.preventDefault()
         console.log("Submitted:", formData)
-
-        setFormData({...initialFormData})
+        if(formData.people < 1){
+            return console.log('Not enough people')
+        }
+        createReservation(formData)
+            .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
+            .then(() => setFormData({...initialFormData}))
     })
     return (
         <main>
@@ -62,6 +66,8 @@ function NewReservation(){
                     <input 
                         id="mobile_number"
                         type="tel"
+                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                        placeholder="012-345-6789"
                         name="mobile_number"
                         onChange={handleInput}
                         value={formData.mobile_number}
@@ -106,7 +112,7 @@ function NewReservation(){
                 </label>
                 <br/>
                 <button type="submit">Submit</button>
-                <button onClick={() => history.push("/")} type="cancel">Cancel</button>
+                <button onClick={() => history.goBack()} type="cancel">Cancel</button>
             </form>
         </main>
     )
