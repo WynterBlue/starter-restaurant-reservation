@@ -19,10 +19,10 @@ function Dashboard({ date }) {
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
-      .catch(setReservationsError);
+      // .catch(setReservationsError);
     return () => abortController.abort();
   }
-
+ 
   return (
     <main>
       <h1>Dashboard</h1>
