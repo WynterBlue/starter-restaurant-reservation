@@ -32,7 +32,7 @@ function validateData(req, res, next){
 }
 function peopleIsValid(req, res, next){
   const { people } = res.locals.data
-  if (people < 1 || !Number.isInteger(people) || !people){
+  if (Number(people) < 1 || !Number.isInteger(people) || !people){
       return next({
           status: 400,
           message: `'people' is not valid.`
@@ -59,16 +59,12 @@ function timeIsValid(req, res, next){
 ///////////////////
 async function list(req, res) {
   const date = req.query.date
-  console.log(date, "line 63")
   if (date){ //if there's a date query, list by date
     const reservations  = await reservationService.listByDate(date)
-    console.log(reservations, "RESERVATIONS******************")
     const data = reservations.sort((a, b) =>  a.reservation_time.localeCompare(b.reservation_time))
-    console.log(data, "DATA *************************")
     res.json({data})
   } else{
     const data = await reservationService.list()
-    console.log(data, "DATA2********************")
     res.json({data});
   }
 }

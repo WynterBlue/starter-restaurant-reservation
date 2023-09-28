@@ -15,7 +15,7 @@ function NewReservation(){
 
     const [errorMessage, setErrorMessage] = useState(null)
     const [formData, setFormData] = useState(initialFormData)
-
+    
     function handleInput(event) {
         setFormData({
             ...formData,
@@ -27,7 +27,7 @@ function NewReservation(){
         event.preventDefault()
         console.log("Submitted:", formData)
         if(formData.people < 1){
-            return console.log('Not enough people')
+            return setErrorMessage('Not enough people')
         }
         createReservation(formData)
             .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
@@ -115,7 +115,7 @@ function NewReservation(){
                     />  
                 </label>
                 <br/>
-                {/* {errorMessage && <p className="error">{errorMessage}</p>} */}
+                {errorMessage && <p className="error">{errorMessage.message}</p>}
                 <button type="submit">Submit</button>
                 <button onClick={() => history.goBack()} type="cancel">Cancel</button>
             </form>
