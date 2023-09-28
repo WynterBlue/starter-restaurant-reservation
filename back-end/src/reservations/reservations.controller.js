@@ -4,47 +4,99 @@
 const reservationService = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 /////////////////// validation
+async function reservationExists(req, res, next){
+  const reservation = await reservationService.read(req.params.reservationId)
+  if(reservation){
+    res.locals.reservation = reservation
+    return next()
+  }
+  next({ status: 404, message: `Reservation ${req.params.reservationId} cannot be found.` });
+}
 function bodyDataHas(propertyName) {
   return function (req, res, next) {
-    
-    const { data = {} } = req.body.data;
+    const { data } = res.locals;
     if (data[propertyName] !== undefined && data[propertyName] !== '') {
-      res.locals.data = data
       return next();
     }
     next({ status: 400, message: `Form must include a valid ${propertyName}` });
   };
 }
+function validateData(req, res, next){
+  const {data} = req.body
+  const foundData = data
+  if (foundData){
+    res.locals.data = data
+    return next()
+  }
+  next({ status: 400, message: `Data is missing.` });
+}
+function peopleIsValid(req, res, next){
+  const { people } = res.locals.data
+  if (people < 1 || !Number.isInteger(people) || !people){
+      return next({
+          status: 400,
+          message: `'people' is not valid.`
+      });
+  }
+  next();
+}
+function dateIsValid(req, res, next){
+  const {reservation_date} = req.body.data
+  const dateObj = new Date(reservation_date)
+  if (dateObj == 'Invalid Date'){
+    next({ status: 400, message: `Invalid reservation_date.` });
+  }
+  next()
+}
+function timeIsValid(req, res, next){
+  const {reservation_time} = req.body.data
+  const timePattern = /^([01]\d|2[0-3]):([0-5]\d)$/;
+  if (timePattern.test(reservation_time)){
+    return next()
+  }
+  next({ status: 400, message: `Invalid reservation_time.` });
+}
 ///////////////////
 async function list(req, res) {
   const date = req.query.date
-  if (date){
+  console.log(date, "line 63")
+  if (date){ //if there's a date query, list by date
     const reservations  = await reservationService.listByDate(date)
+    console.log(reservations, "RESERVATIONS******************")
     const data = reservations.sort((a, b) =>  a.reservation_time.localeCompare(b.reservation_time))
+    console.log(data, "DATA *************************")
     res.json({data})
   } else{
     const data = await reservationService.list()
+    console.log(data, "DATA2********************")
     res.json({data});
   }
 }
 
 
 async function read(req, res, next) {
-  console.log(res.params)
-
-    const data = await reservationService.read(req.params.reservationId)
+    const data = res.locals.reservation
     res.json({data})
-  
 }
 
 async function create(req, res, next) {
   const data = await reservationService.create(req.body.data)
-  console.log(req.body)
   res.status(201).json({data})
 }
 
 module.exports = {
   list: asyncErrorBoundary(list),
-  read: asyncErrorBoundary(read),
-  create: asyncErrorBoundary(create)
+  read: [reservationExists, asyncErrorBoundary(read)],
+  create: [
+    validateData,
+    bodyDataHas('first_name'),
+    bodyDataHas('last_name'),
+    bodyDataHas('mobile_number'),
+    bodyDataHas('reservation_date'),
+    dateIsValid,
+    bodyDataHas('reservation_time'),
+    timeIsValid,
+    bodyDataHas('people'),
+    peopleIsValid,
+    asyncErrorBoundary(create)]
 };

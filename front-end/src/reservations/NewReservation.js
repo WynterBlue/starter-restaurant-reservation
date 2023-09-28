@@ -13,6 +13,7 @@ function NewReservation(){
         people: ''
     }
 
+    const [errorMessage, setErrorMessage] = useState(null)
     const [formData, setFormData] = useState(initialFormData)
 
     function handleInput(event) {
@@ -31,7 +32,10 @@ function NewReservation(){
         createReservation(formData)
             .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
             .then(() => setFormData({...initialFormData}))
+            .catch(setErrorMessage)
     })
+
+    console.log(errorMessage) 
     return (
         <main>
             <p>New Reservation Page</p>
@@ -111,9 +115,11 @@ function NewReservation(){
                     />  
                 </label>
                 <br/>
+                {/* {errorMessage && <p className="error">{errorMessage}</p>} */}
                 <button type="submit">Submit</button>
                 <button onClick={() => history.goBack()} type="cancel">Cancel</button>
             </form>
+
         </main>
     )
 }
