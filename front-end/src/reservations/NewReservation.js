@@ -30,6 +30,18 @@ function NewReservation(){
             setErrorMessage('Not enough people')
             return 
         }
+        if(formData.reservation_date){
+            const date = new Date()
+            const dateObj = new Date(formData.reservation_date)
+            if (dateObj.reservation_date < date){
+                setErrorMessage('Please choose a future date.')
+                return
+              }
+              else if (dateObj.getDay() == 1){
+                setErrorMessage("Sorry, we're closed on Tuesdays.")
+                return
+              }
+        }
         console.log(errorMessage)
         const result = {
             ...formData,
@@ -76,7 +88,7 @@ function NewReservation(){
                     <input 
                         id="mobile_number"
                         type="tel"
-                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                        // pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                         placeholder="012-345-6789"
                         name="mobile_number"
                         onChange={handleInput}
@@ -121,7 +133,7 @@ function NewReservation(){
                     />  
                 </label>
                 <br/>
-                {errorMessage && <p className="error">{errorMessage.message || errorMessage}</p>}
+                {errorMessage && <p className="alert alert-danger">{errorMessage.message || errorMessage}</p>}
                 <button type="submit">Submit</button>
                 <button onClick={() => history.goBack()} type="cancel">Cancel</button>
             </form>
