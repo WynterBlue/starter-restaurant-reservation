@@ -42,6 +42,9 @@ function NewReservation(){
                 return
               }
         }
+        if(formData.reservation_time){
+            
+        }
         console.log(errorMessage)
         const result = {
             ...formData,

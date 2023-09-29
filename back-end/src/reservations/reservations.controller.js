@@ -56,10 +56,18 @@ function dateIsValid(req, res, next){
   }
 }
 function timeIsValid(req, res, next){
+  //////////setup
   const {reservation_time} = req.body.data
   const timePattern = /^([01]\d|2[0-3]):([0-5]\d)$/;
-  if (timePattern.test(reservation_time)){
-    return next()
+  const openTime = "10:30"
+  const closeResTime = "21:30"
+////////////
+  if (timePattern.test(reservation_time)){// if valid format
+    if(reservation_time < openTime || reservation_time > closeResTime){// if valid reservation time
+      next({ status: 400, message: `Invalid reservation_time.` });
+    } else {//next
+      return next()
+    }
   }
   next({ status: 400, message: `Invalid reservation_time.` });
 }
