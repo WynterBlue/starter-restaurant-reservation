@@ -31,7 +31,11 @@ function NewReservation(){
             return 
         }
         console.log(errorMessage)
-        createReservation(formData)
+        const result = {
+            ...formData,
+            people: Number(formData.people)
+        }
+        createReservation(result)
             .then(() => history.push(`/dashboard?date=${formData.reservation_date}`))
             .then(() => setFormData({...initialFormData}))
             .catch(setErrorMessage)

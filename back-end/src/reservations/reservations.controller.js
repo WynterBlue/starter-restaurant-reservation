@@ -32,7 +32,7 @@ function validateData(req, res, next){
 }
 function peopleIsValid(req, res, next){
   const { people } = res.locals.data
-  if (Number(people) < 1 || !Number.isInteger(Number(people)) || !people){ //!Number.isInteger(people) idk why
+  if (people < 1 || !Number.isInteger(people) || !people){// test is checking for string numbers, form sends numbers as strings
       return next({
           status: 400,
           message: `'people' is not valid.`
