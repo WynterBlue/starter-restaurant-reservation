@@ -43,7 +43,13 @@ function NewReservation(){
               }
         }
         if(formData.reservation_time){
-            
+            const reservationTime = formData.reservation_time
+            const openTime = "10:30"
+            const closeResTime = "21:30"
+            if(reservationTime < openTime || reservationTime > closeResTime){// if valid reservation time
+                setErrorMessage(`Invalid reservation_time.`)
+                return
+              }
         }
         console.log(errorMessage)
         const result = {
