@@ -5,7 +5,7 @@ const reservationService = require("./reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary")
 /////////////////// validation
 async function reservationExists(req, res, next){
-  const reservation = await reservationService.read(req.params.reservationId)
+  const reservation = await reservationService.readReservation(req.params.reservationId)
   if(reservation){
     res.locals.reservation = reservation
     return next()

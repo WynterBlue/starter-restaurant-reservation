@@ -11,18 +11,15 @@ function create(table){
         .then((createdTable) => createdTable[0])
 }
 
-function read(table_name){
-    return knex("tables").select("*").where({table_name}).first()
+function read(table_id){
+    return knex("tables").select("*").where({table_id}).first()
 }
 
-function readReservation(reservation_id){
-    return knex("tables").select("*").where({reservation_id}).first()
-}
 
-function update(updatedTable) {
+function update(updatedTable, reservationId) {
     return knex("tables")
         .select("*")
-        .where({table_id: updatedTable.table_id})
+        .where({reservation_id: reservationId })
         .update(updatedTable, "*")
 }
 
@@ -31,6 +28,6 @@ function update(updatedTable) {
 module.exports = {
     list,
     create,
-    readReservation,
+    read,
     update,
 }

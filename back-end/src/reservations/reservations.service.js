@@ -11,7 +11,7 @@ function listByDate(date){
         .whereNotIn("status", ["finished", "canceled"])
 }
 
-function read(reservationId){
+function readReservation(reservationId){
     return knex("reservations")
         .select("*")
         .where({reservation_id: reservationId})
@@ -29,5 +29,5 @@ module.exports = {
     list,
     listByDate,
     create,
-    read
+    readReservation
 }
