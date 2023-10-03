@@ -54,8 +54,9 @@ function validCapacity(req, res, next) {
 }
 function tableIsFree(req, res, next) {
     const {table} = res.locals
-    if (table.status == "free"){
-        table.status = "occupied"
+    console.log(table)
+    if (!table.reservation_id){
+
         return next()
     }
     return next({ status: 400, message: `Table is occupied.` });
@@ -84,10 +85,9 @@ async function update(req, res, next) {
   const updatedTable = {
     ...req.body.data,
     table_id: res.locals.table.table_id,
-    status: "occupied"
+    reservation_id: res.locals.data.reservation_id
   };
-  console.log(updatedTable)
-  const data = await service.update(updatedTable, res.locals.data.reservation_id);
+  const data = await service.update(updatedTable);
   res.json({ data });
 }
 

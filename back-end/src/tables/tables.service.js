@@ -16,10 +16,10 @@ function read(table_id){
 }
 
 
-function update(updatedTable, reservationId) {
+function update(updatedTable) {
     return knex("tables")
         .select("*")
-        .where({reservation_id: reservationId })
+        .where({table_id: updatedTable.table_id })
         .update(updatedTable, "*")
 }
 
