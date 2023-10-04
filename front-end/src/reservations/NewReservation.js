@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom/";
 import { createReservation } from "../utils/api";
 
+
 function NewReservation(){
     const history = useHistory()
     let initialFormData = {
@@ -32,12 +33,13 @@ function NewReservation(){
         }
         if(formData.reservation_date){
             const date = new Date()
-            const dateObj = new Date(formData.reservation_date)
-            if (dateObj.reservation_date < date){
+            const dateString = formData.reservation_date + " " + formData.reservation_time 
+            const dateObj = new Date(dateString)
+            if (dateObj < date){
                 setErrorMessage('Please choose a future date.')
                 return
               }
-              else if (dateObj.getDay() == 1){
+              else if (dateObj.getDay() === 1){
                 setErrorMessage("Sorry, we're closed on Tuesdays.")
                 return
               }

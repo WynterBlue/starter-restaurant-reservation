@@ -41,12 +41,13 @@ function peopleIsValid(req, res, next){
   next();
 }
 function dateIsValid(req, res, next){
-  const {reservation_date} = req.body.data
-  const dateObj = new Date(reservation_date)
+  const {reservation_date, reservation_time} = req.body.data
+  const dateString = reservation_date + " " + reservation_time 
+  const dateObj = new Date(dateString)
   const date = new Date()
   if (dateObj == 'Invalid Date'){
     next({ status: 400, message: `Invalid reservation_date.` });
-  } else if (dateObj.getDay() == 1){
+  } else if (dateObj.getUTCDay() == 2){
     next({ status: 400, message: `Sorry, we're closed on Tuesdays.` });
   } else if (dateObj < date){
     next({ status: 400, message: `Please make a reservation for a future date.` });

@@ -54,7 +54,6 @@ function validCapacity(req, res, next) {
 }
 function tableIsFree(req, res, next) {
     const {table} = res.locals
-    console.log(table)
     if (!table.reservation_id){
 
         return next()
@@ -74,6 +73,11 @@ function bodyDataHas(propertyName) {
 async function list(req, res, next) {
   const data = await service.list();
   res.json({ data });
+}
+
+async function read(req, res, next){
+  const data = res.locals.table
+  res.json({data})
 }
 
 async function create(req, res, next) {
@@ -99,6 +103,7 @@ module.exports = {
     validCapacity,
     asyncErrorBoundary(create),
   ],
+  read: [tableIsValid, asyncErrorBoundary(read)],
   update: [
     validateData,
     bodyDataHas("reservation_id"),
