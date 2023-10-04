@@ -60,6 +60,14 @@ function tableIsFree(req, res, next) {
     }
     return next({ status: 400, message: `Table is occupied.` });
 }
+function tableIsOccupied(req, res, next) {
+  const {table} = res.locals
+  if (table.reservation_id){
+
+      return next()
+  }
+  return next({ status: 400, message: `Table is not occupied.` });
+}
 function bodyDataHas(propertyName) {
   return function (req, res, next) {
     const { data } = res.locals;
@@ -95,6 +103,12 @@ async function update(req, res, next) {
   res.json({ data });
 }
 
+async function destroy(req, res, next){
+  const {table} = res.locals
+  const result = await service.destroy(table.reservation_id)
+  res.sendStatus(200)
+}
+
 module.exports = {
   list: asyncErrorBoundary(list),
   create: [
@@ -113,4 +127,5 @@ module.exports = {
     tableIsFree,
     asyncErrorBoundary(update)
 ],
+delete: [tableIsValid, tableIsOccupied, asyncErrorBoundary(destroy)]
 };
