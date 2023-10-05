@@ -1,4 +1,5 @@
 const service = require("./tables.service");
+const reservationService = require("../reservations/reservations.service")
 const {readReservation} = require("../reservations/reservations.service")
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 ///////////////////validaton
@@ -77,6 +78,14 @@ function bodyDataHas(propertyName) {
     next({ status: 400, message: `Form must include a valid ${propertyName}` });
   };
 }
+function reservationIsFree(req, res, next){
+  const {reservation} = res.locals
+  if (reservation.status === "seated"){
+    return next({ status: 400, message: `Reservation is already seated.` });
+  } else {
+    next()
+  }
+}
 ///////////////////
 async function list(req, res, next) {
   const data = await service.list();
@@ -100,12 +109,15 @@ async function update(req, res, next) {
     reservation_id: res.locals.data.reservation_id
   };
   const data = await service.update(updatedTable);
+  const updateReservation = await reservationService.update(res.locals.data.reservation_id, "seated")
   res.json({ data });
 }
 
 async function destroy(req, res, next){
   const {table} = res.locals
+  console.log(table)
   const result = await service.destroy(table.reservation_id)
+  const updateReservation = await reservationService.update(table.reservation_id, "finished")
   res.sendStatus(200)
 }
 
@@ -125,6 +137,7 @@ module.exports = {
     tableIsValid,
     validTableCapacity,
     tableIsFree,
+    reservationIsFree,
     asyncErrorBoundary(update)
 ],
 delete: [tableIsValid, tableIsOccupied, asyncErrorBoundary(destroy)]

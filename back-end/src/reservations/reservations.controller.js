@@ -72,6 +72,15 @@ function timeIsValid(req, res, next){
   }
   next({ status: 400, message: `Invalid reservation_time.` });
 }
+function validStatus(req, res, next){
+  const {data} = res.locals
+  if (data.status == "booked"){
+    return next()
+  }
+  else {
+    next({ status: 400, message: `Reservation is ${data.status}.` });
+  }
+}
 ///////////////////
 async function list(req, res) {
   const date = req.query.date
@@ -85,7 +94,6 @@ async function list(req, res) {
   }
 }
 
-
 async function read(req, res, next) {
     const data = res.locals.reservation
     res.json({data})
@@ -96,11 +104,42 @@ async function create(req, res, next) {
   res.status(201).json({data})
 }
 
+async function update(req, res, next) {
+  const {reservation} = res.locals
+  const {status} = req.body.data
+  if(status!== "seated" && status !== "finished" && status !== "cancelled" && status !== "booked"){
+    return next({ status: 400, message: `Status ${status} unknown.` });
+  }
+  if (reservation.status === "booked"){
+    const data = await reservationService.update(reservation.reservation_id, status)
+
+    res.json({data: data})
+
+  } else if (reservation.status === "seated"){
+    const data = await reservationService.update(reservation.reservation_id, status)
+    res.json({data: data})
+
+  } else if (reservation.status === "finished") {
+    return next({ status: 400, message: `A finished reservation cannot be updated.` });
+  }
+}
+
+// async function update(req, res, next) {
+//   const updatedTable = {
+//     ...req.body.data,
+//     table_id: res.locals.table.table_id,
+//     reservation_id: res.locals.data.reservation_id
+//   };
+//   const data = await service.update(updatedTable);
+//   res.json({ data });
+// }
+
 module.exports = {
   list: asyncErrorBoundary(list),
   read: [reservationExists, asyncErrorBoundary(read)],
   create: [
     validateData,
+    validStatus,
     bodyDataHas('first_name'),
     bodyDataHas('last_name'),
     bodyDataHas('mobile_number'),
@@ -110,5 +149,6 @@ module.exports = {
     timeIsValid,
     bodyDataHas('people'),
     peopleIsValid,
-    asyncErrorBoundary(create)]
+    asyncErrorBoundary(create)],
+    update: [reservationExists, asyncErrorBoundary(update)]
 };

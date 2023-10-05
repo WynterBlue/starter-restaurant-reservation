@@ -15,7 +15,6 @@ function read(table_id){
     return knex("tables").select("*").where({table_id}).first()
 }
 
-
 function update(updatedTable) {
     return knex("tables")
         .select("*")
