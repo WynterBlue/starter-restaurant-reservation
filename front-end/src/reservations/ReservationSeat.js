@@ -25,7 +25,7 @@ function ReservationSeat() {
   useEffect(() => {
     //get the reservation
     readReservation(reservation_id).then((data) => setReservation(data));
-    if (!reservation.id) {
+    if (!reservation_id) {
       return <p>Loading...</p>;
     }
   }, []);

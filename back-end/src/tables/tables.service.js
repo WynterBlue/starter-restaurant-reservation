@@ -27,6 +27,7 @@ function destroy(reservation_id){
     return knex("tables")
         .where({reservation_id: reservation_id})
         .update({reservation_id: null}, "*")
+        .update({status: "free"}, "*")
         .then((updatedReservation) => updatedReservation[0])
 }
 

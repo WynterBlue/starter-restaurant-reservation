@@ -41,7 +41,7 @@ function Dashboard({ date }) {
         <h4 className="mb-0">Reservations for date</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      <section>{JSON.stringify(reservations)}</section>
+      <section>
       <div class="d-flex justify-content-around">
         <div>
           {reservations.length > 0 ? (
@@ -55,7 +55,7 @@ function Dashboard({ date }) {
         <ErrorAlert error={tablesError} />
         <div>
           {tables.length > 0 ? (
-            tables.map((table) => <TableDisplay table={table} />)
+            tables.map((table) => <TableDisplay table={table} setTables={setTables} setTablesError={setTablesError} />)
           ) : (
             <p>There are no tables.</p>
           )}
@@ -72,6 +72,8 @@ function Dashboard({ date }) {
           Next
         </button>
       </div>
+      </section>
+      
     </main>
   );
 }
