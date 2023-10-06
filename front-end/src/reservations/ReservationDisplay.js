@@ -1,8 +1,14 @@
 import React from "react";
+import { updateReservation } from "../utils/api";
 
 function ReservationDisplay({reservation}){
     const {first_name, last_name, mobile_number, people, reservation_date, reservation_id, reservation_time, status} = reservation
     
+    const handleSeating = () => {
+        updateReservation(reservation_id, "booked")
+            .then(() => console.log("it worked"))
+    }
+
     return (
         <div>
             {status !== "finished" && 
@@ -19,7 +25,7 @@ function ReservationDisplay({reservation}){
                         {status == "booked" && (
                         <a 
                         href={`/reservations/${reservation_id}/seat`}
-                        onClick={""}//change to seated (PUT)
+                        onClick={handleSeating}//change reservation to seated (PUT)
                         >
                             Seat
                         </a>

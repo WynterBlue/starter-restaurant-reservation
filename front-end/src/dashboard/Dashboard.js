@@ -32,8 +32,6 @@ function Dashboard({ date }) {
       .catch(setReservationsError);
   }
   const history = useHistory();
-  console.log(reservations);
-  console.log(tables);
   return (
     <main>
       <h1>Dashboard</h1>
@@ -55,7 +53,7 @@ function Dashboard({ date }) {
         <ErrorAlert error={tablesError} />
         <div>
           {tables.length > 0 ? (
-            tables.map((table) => <TableDisplay table={table} setTables={setTables} setTablesError={setTablesError} />)
+            tables.map((table) => <TableDisplay table={table} setTables={setTables} setTablesError={setTablesError} loadDashboard={loadDashboard}/>)
           ) : (
             <p>There are no tables.</p>
           )}

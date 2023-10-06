@@ -117,3 +117,13 @@ export async function deleteResTable(table_id, signal) {
     }
   });
 }
+
+export async function updateReservation(reservation_id, status){
+  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({data: status}),
+  };
+  return await fetchJson(url, options, {});
+}

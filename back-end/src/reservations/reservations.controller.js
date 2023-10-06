@@ -74,7 +74,7 @@ function timeIsValid(req, res, next){
 }
 function validStatus(req, res, next){
   const {data} = res.locals
-  if (data.status == "booked"){
+  if (data.status == "booked" || data.status =="free" || !data.status){
     return next()
   }
   else {
