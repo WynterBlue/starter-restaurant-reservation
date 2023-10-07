@@ -1,5 +1,14 @@
 const knex = require("../db/connection");
 
+function search(mobile_number) {
+    return knex("reservations")
+      .whereRaw(
+        "translate(mobile_number, '() -', '') like ?",
+        `%${mobile_number.replace(/\D/g, "")}%`
+      )
+      .orderBy("reservation_date");
+  }
+
 function list(){
     return knex("reservations").select("*")
 }
@@ -33,10 +42,13 @@ function update(reservation_id, status){
         .then((updatedStatus) => updatedStatus[0])
 }
 
+
+
 module.exports = {
     list,
     listByDate,
     create,
     readReservation,
-    update
+    update,
+    search
 }

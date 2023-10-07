@@ -9,7 +9,7 @@ function TableDisplay({ table, setTables, setTablesError, loadDashboard }) {
       "Is this table ready to seat new guests? This cannot be undone."
     );
     if (result) {
-      updateReservation(reservation_id, "finished").then(() => loadDashboard()); //rekiad dashboard after updating reservation
+      updateReservation(reservation_id, "finished").then(() => loadDashboard()); //reload dashboard after updating reservation
       deleteResTable(id) //remove reservation_id
         .then(() =>
           listTables() //get tables again

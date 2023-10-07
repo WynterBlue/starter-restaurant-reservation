@@ -84,7 +84,13 @@ function validStatus(req, res, next){
 ///////////////////
 async function list(req, res) {
   const date = req.query.date
-  if (date){ //if there's a date query, list by date
+  const mobile_number = req.query.mobile_number
+  console.log(mobile_number)
+  if(mobile_number) {//if there's a mobile number query
+    const data = await reservationService.search(mobile_number)
+    res.json({data})
+  }
+  else if (date){ //if there's a date query, list by date
     const reservations  = await reservationService.listByDate(date)
     const data = reservations.sort((a, b) =>  a.reservation_time.localeCompare(b.reservation_time))
     res.json({data})
