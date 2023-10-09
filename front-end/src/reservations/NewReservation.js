@@ -68,7 +68,7 @@ function NewReservation(){
     return (
         <main>
             <p>New Reservation Page</p>
-             <form onSubmit={handleSubmit}> 
+             <form className="" onSubmit={handleSubmit}> 
                 <label htmlFor="first_name">
                     First Name:
                     <input 
@@ -146,7 +146,7 @@ function NewReservation(){
                 <br/>
                 {errorMessage && <p className="alert alert-danger">{errorMessage.message || errorMessage}</p>}
                 <button type="submit">Submit</button>
-                <button onClick={() => history.goBack()} type="cancel">Cancel</button>
+                <button className="btn-danger" onClick={() => history.goBack()} type="cancel">Cancel</button>
             </form>
 
         </main>

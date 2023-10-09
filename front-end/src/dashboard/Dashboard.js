@@ -12,11 +12,13 @@ import TableDisplay from "../tables/TableDisplay";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
+import "./Dashboard.css"
 function Dashboard({ date }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
+ 
 
   useEffect(loadDashboard, [date]);
   useEffect(() => {
@@ -34,44 +36,55 @@ function Dashboard({ date }) {
   const history = useHistory();
   return (
     <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for date</h4>
+      <h1>Reservations</h1>
+      <div className="d-md-flex mb-3 justify-content-center">
+        <h4 className="mb-0">Reservations for date {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
       <section>
-      <div class="d-flex justify-content-around">
-        <div>
-          {reservations.length > 0 ? (
-            reservations.map((reservation) => (
-              <ReservationDisplay reservation={reservation} loadDashboard= {loadDashboard}/>
-            ))
-          ) : (
-            <p>There are no reservations.</p>
-          )}
+      <div className="d-flex justify-content-center"> 
+          <button
+            onClick={() => history.push(`dashboard?date=${previous(date)}`)}
+          >
+            Previous
+          </button>
+          <Link to={`/`}>Today</Link>
+          <button onClick={() => history.push(`dashboard?date=${next(date)}`)}>
+            Next
+          </button>
         </div>
-        <ErrorAlert error={tablesError} />
-        <div>
-          {tables.length > 0 ? (
-            tables.map((table) => <TableDisplay table={table} setTables={setTables} setTablesError={setTablesError} loadDashboard={loadDashboard}/>)
-          ) : (
-            <p>There are no tables.</p>
-          )}
+        <div class="d-flex justify-content-around">
+          <div class="d-flex">
+            {reservations.length > 0 ? (
+              reservations.map((reservation) => (
+                <ReservationDisplay
+                  reservation={reservation}
+                  loadDashboard={loadDashboard}
+                />
+              ))
+            ) : (
+              <p>There are no reservations.</p>
+            )}
+          </div>
+          <ErrorAlert error={tablesError} />
         </div>
-      </div>
-      <div>
-        <Link to={`/`}>Today</Link>
-        <button
-          onClick={() => history.push(`dashboard?date=${previous(date)}`)}
-        >
-          Previous
-        </button>
-        <button onClick={() => history.push(`dashboard?date=${next(date)}`)}>
-          Next
-        </button>
-      </div>
+        <div>
+        <div>
+            {tables.length > 0 ? (
+              tables.map((table) => (
+                <TableDisplay
+                  table={table}
+                  setTables={setTables}
+                  setTablesError={setTablesError}
+                  loadDashboard={loadDashboard}
+                />
+              ))
+            ) : (
+              <p>There are no tables.</p>
+            )}
+          </div>
+        </div>
       </section>
-      
     </main>
   );
 }

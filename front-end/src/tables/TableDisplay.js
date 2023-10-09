@@ -19,12 +19,13 @@ function TableDisplay({ table, setTables, setTablesError, loadDashboard }) {
     }
   };
   return (
-    <div className="border">
-      <p>{table_name}</p>
+    <div className="border d-flex justify-content-center">
+      <p>{table_name} </p>
       {reservation_id ? (
         <div>
           <p data-table-id-status={table_id}>Occupied</p>
           <button
+          className="btn btn-danger"
             data-table-id-finish={table_id}
             onClick={() => handDelete(table_id)}
           >

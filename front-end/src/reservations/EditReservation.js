@@ -122,7 +122,7 @@ function EditReservation(){
             <br/>
             {errorMessage && <p className="alert alert-danger">{errorMessage.message || errorMessage}</p>}
             <button type="submit">Submit</button>
-            <button onClick={() => history.push(`/dashboard?date=${formData.reservation_date}`)} type="cancel">Cancel</button>
+            <button className="btn-danger" onClick={() => history.push(`/dashboard?date=${formData.reservation_date}`)} type="cancel">Cancel</button>
         </form>
 
     </main>

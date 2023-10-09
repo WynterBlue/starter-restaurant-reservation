@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { searchReservations } from "../utils/api";
 import ReservationDisplay from "../reservations/ReservationDisplay";
 
+
 function NewSearch() {
   const [searchData, setSearchData] = useState({
     mobile_number: "",
@@ -23,7 +24,7 @@ function NewSearch() {
       .then(() => console.log(foundReservations));
   };
   return (
-    <div>
+    <main>
       <label for="search">Search by Phone Number:</label>
       <input
         type="search"
@@ -41,7 +42,7 @@ function NewSearch() {
           ) : (
             <p>No reservations found.</p>
           )}
-    </div>
+    </main>
   );
 }
 

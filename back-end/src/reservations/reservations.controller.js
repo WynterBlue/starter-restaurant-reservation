@@ -47,12 +47,25 @@ function validatePeople(req, res, next) {
   }
   next();
 }
+function validateResPeople(req, res, next) {
+  const { people } = res.locals.data;
+  if (people < 1 || !Number(people) || !people) {
+    // test is checking for string numbers, form sends numbers as strings
+    return next({
+      status: 400,
+      message: `'people' is not valid.`,
+    });
+  }
+  next();
+}
 
 function dateIsValid(req, res, next) {
   const { reservation_date, reservation_time } = req.body.data;
   const dateString = reservation_date + " " + reservation_time;
   const dateObj = new Date(dateString);
   const date = new Date();
+  console.log(dateObj)
+  console.log(dateObj.getUTCDay())
   if (dateObj == "Invalid Date") {
     next({ status: 400, message: `Invalid reservation_date.` });
   } else if (dateObj.getUTCDay() == 2) {

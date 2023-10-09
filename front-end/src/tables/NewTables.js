@@ -59,7 +59,7 @@ function NewTable() {
         </label>
         <br />
         <button type="submit">Submit</button>
-        <button onClick={() => history.goBack()} type="cancel">
+        <button  className="btn-danger" onClick={() => history.goBack()} type="cancel">
           Cancel
         </button>
       </form>
