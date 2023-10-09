@@ -39,7 +39,7 @@ function NewReservation(){
                 setErrorMessage('Please choose a future date.')
                 return
               }
-              else if (dateObj.getDay() === 1){
+              else if (dateObj.getUTCDay() == 2){
                 setErrorMessage("Sorry, we're closed on Tuesdays.")
                 return
               }

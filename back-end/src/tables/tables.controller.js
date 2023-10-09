@@ -115,7 +115,6 @@ async function update(req, res, next) {
 
 async function destroy(req, res, next){
   const {table} = res.locals
-  console.log(table)
   const result = await service.destroy(table.reservation_id)
   const updateReservation = await reservationService.update(table.reservation_id, "finished")
   res.sendStatus(200)

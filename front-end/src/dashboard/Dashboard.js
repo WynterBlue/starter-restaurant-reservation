@@ -44,7 +44,7 @@ function Dashboard({ date }) {
         <div>
           {reservations.length > 0 ? (
             reservations.map((reservation) => (
-              <ReservationDisplay reservation={reservation} />
+              <ReservationDisplay reservation={reservation} loadDashboard= {loadDashboard}/>
             ))
           ) : (
             <p>There are no reservations.</p>

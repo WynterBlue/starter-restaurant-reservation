@@ -1,5 +1,5 @@
 import React from "react";
-import { deleteResTable, listTables, updateReservation } from "../utils/api";
+import { deleteResTable, listTables, updateReservationStatus } from "../utils/api";
 
 function TableDisplay({ table, setTables, setTablesError, loadDashboard }) {
   const { table_id, table_name, reservation_id } = table;
@@ -9,7 +9,7 @@ function TableDisplay({ table, setTables, setTablesError, loadDashboard }) {
       "Is this table ready to seat new guests? This cannot be undone."
     );
     if (result) {
-      updateReservation(reservation_id, "finished").then(() => loadDashboard()); //reload dashboard after updating reservation
+      updateReservationStatus(reservation_id, "finished").then(() => loadDashboard()); //reload dashboard after updating reservation
       deleteResTable(id) //remove reservation_id
         .then(() =>
           listTables() //get tables again
@@ -18,7 +18,6 @@ function TableDisplay({ table, setTables, setTablesError, loadDashboard }) {
         );
     }
   };
-  console.log(reservation_id);
   return (
     <div className="border">
       <p>{table_name}</p>

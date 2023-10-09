@@ -118,12 +118,12 @@ export async function deleteResTable(table_id, signal) {
   });
 }
 
-export async function updateReservation(reservation_id, status){
+export async function updateReservationStatus(reservation_id, status){
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`
   const options = {
     method: "PUT",
     headers,
-    body: JSON.stringify({data: status}),
+    body: JSON.stringify({data: {status:status}}),
   };
   return await fetchJson(url, options, {});
 }
@@ -131,4 +131,14 @@ export async function updateReservation(reservation_id, status){
 export async function searchReservations(mobile_number, signal) {
   const url = `${API_BASE_URL}/reservations?mobile_number=${mobile_number}`;
   return await fetchJson(url, { signal }, []);
+}
+
+export async function updateReservation(updatedReservation){
+  const url = `${API_BASE_URL}/reservations/${updatedReservation.reservation_id}`
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({data: updatedReservation}),
+  };
+  return await fetchJson(url, options, {});
 }

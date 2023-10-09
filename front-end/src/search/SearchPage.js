@@ -3,9 +3,6 @@ import { searchReservations } from "../utils/api";
 import ReservationDisplay from "../reservations/ReservationDisplay";
 
 function NewSearch() {
-    let initialSearchForm = {
-        mobile_number: ""
-    }
   const [searchData, setSearchData] = useState({
     mobile_number: "",
   });
