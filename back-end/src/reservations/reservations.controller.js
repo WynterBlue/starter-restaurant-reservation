@@ -21,6 +21,7 @@ function bodyDataHas(propertyName) {
     next({ status: 400, message: `Form must include a valid ${propertyName}` });
   };
 }
+
 function validateData(req, res, next){
   const {data} = req.body
   const foundData = data
@@ -81,11 +82,31 @@ function validStatus(req, res, next){
     next({ status: 400, message: `Reservation is ${data.status}.` });
   }
 }
+function timeResIsValid(req, res, next){
+  //////////setup
+  const {reservation_time} = req.body.data
+  const timePattern = /^([01]\d|2[0-3]):([0-5]\d)$/;
+////////////
+  if (timePattern.test(reservation_time)){// if valid format
+      return next() 
+  }
+  next({ status: 400, message: `Invalid reservation_time.` });
+}
+function dateResIsValid(req, res, next){
+  const {reservation_date, reservation_time} = req.body.data
+  const dateString = reservation_date + " " + reservation_time 
+  const dateObj = new Date(dateString)
+  if (dateObj == 'Invalid Date'){
+    next({ status: 400, message: `Invalid reservation_date.` });
+  }
+  else {
+    next()
+  }
+}
 ///////////////////
 async function list(req, res) {
   const date = req.query.date
   const mobile_number = req.query.mobile_number
-  console.log(mobile_number)
   if(mobile_number) {//if there's a mobile number query
     const data = await reservationService.search(mobile_number)
     res.json({data})
@@ -130,15 +151,22 @@ async function update(req, res, next) {
   }
 }
 
-// async function update(req, res, next) {
-//   const updatedTable = {
-//     ...req.body.data,
-//     table_id: res.locals.table.table_id,
-//     reservation_id: res.locals.data.reservation_id
-//   };
-//   const data = await service.update(updatedTable);
-//   res.json({ data });
-// }
+async function updateReservation(req, res, next) {
+  console.log(req.body.data)
+  const updatedReservation = {
+    ...req.body.data,
+  };
+  const data = await reservationService.updateReservation(updatedReservation);
+  console.log(data)
+  res.locals.data = data
+  next()
+}
+
+function sendRes(req, res, next){
+  const {data} = res.locals
+  res.json({data})
+}
+
 
 module.exports = {
   list: asyncErrorBoundary(list),
@@ -156,5 +184,20 @@ module.exports = {
     bodyDataHas('people'),
     peopleIsValid,
     asyncErrorBoundary(create)],
-    update: [reservationExists, asyncErrorBoundary(update)]
+    update: [reservationExists, asyncErrorBoundary(update)],
+    updateReservation: [
+      validateData,
+      reservationExists, 
+      bodyDataHas('first_name'),
+      bodyDataHas('last_name'),
+      bodyDataHas('mobile_number'),
+      bodyDataHas('reservation_time'),
+      timeResIsValid,
+      bodyDataHas('reservation_date'),
+      dateResIsValid,
+      bodyDataHas('people'),
+      peopleIsValid,
+      asyncErrorBoundary(updateReservation),
+      sendRes
+    ]
 };
