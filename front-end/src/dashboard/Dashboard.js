@@ -21,17 +21,20 @@ function Dashboard({ date }) {
  
 
   useEffect(loadDashboard, [date]);
-  useEffect(() => {
-    listTables()
-      .then((data) => setTables(data))
-      .catch(setTablesError);
-  }, []);
+
   function loadDashboard() {
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
+
+
+    listTables(abortController.signal)
+      .then((data) => setTables(data))
+      .catch(setTablesError);
+
+    return () => abortController.abort()
   }
   const history = useHistory();
   return (
