@@ -53,6 +53,7 @@ function NewReservation(){
                 return
               }
         }
+        
         console.log(errorMessage)
         const result = {
             ...formData,

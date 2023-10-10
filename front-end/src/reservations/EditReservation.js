@@ -34,8 +34,13 @@ function EditReservation(){
 
       function handleSubmit(event) {
         event.preventDefault(); // prevents page from refreshing by default
-        console.log(formData); //sanity check
-       updateReservation(formData).then(() => history.push(`/dashboard?date=${formData.reservation_date}`));
+        console.log(formData);
+         //sanity check
+         const result = {
+            ...formData,
+            people: Number(formData.people)
+        }
+       updateReservation(result).then(() => history.push(`/dashboard?date=${formData.reservation_date}`));
       }
 
     if (!reservationId) {

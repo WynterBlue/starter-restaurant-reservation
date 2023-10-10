@@ -38,6 +38,7 @@ function validateData(req, res, next) {
 }
 function validatePeople(req, res, next) {
   const { people } = res.locals.data;
+  console.log(typeof(people))
   if (people < 1 || !Number.isInteger(people) || !people) {
     // test is checking for string numbers, form sends numbers as strings
     return next({
