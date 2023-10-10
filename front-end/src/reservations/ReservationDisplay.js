@@ -1,5 +1,6 @@
 import React from "react";
 import { updateReservationStatus } from "../utils/api";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
 
 function ReservationDisplay({ reservation, loadDashboard }) {
   const {
@@ -34,7 +35,7 @@ function ReservationDisplay({ reservation, loadDashboard }) {
       {status !== "finished" && status !== "cancelled" && (
         <div className="border rounded m-2">
           <div>
-            <div className="d-flex text-white p-2">
+            <div className="">
               <p>{first_name + " " + last_name}</p>
               <p data-reservation-id-status={reservation_id}>{status}</p>
             </div>
@@ -45,7 +46,7 @@ function ReservationDisplay({ reservation, loadDashboard }) {
             </div>
           </div>
           <div className="d-flex justify-content-around">
-            <a className="btn btn-primary" href={`/reservations/${reservation_id}/edit`}>Edit</a>
+            <Link className="btn btn-primary" to={`/reservations/${reservation_id}/edit`}>Edit</Link>
             <button
             className="btn btn-danger"
               data-reservation-id-cancel={reservation_id}
@@ -54,14 +55,14 @@ function ReservationDisplay({ reservation, loadDashboard }) {
               Cancel
             </button>
             <div >
-              {status == "booked" && (
-                <a
+              {status === "booked" && (
+                <Link
                   className="btn btn-light "
-                  href={`/reservations/${reservation_id}/seat`}
+                  to={`/reservations/${reservation_id}/seat`}
                   onClick={handleSeating} //change reservation to seated (PUT)
                 >
                   Seat
-                </a>
+                </Link>
               )}
             </div>
           </div>

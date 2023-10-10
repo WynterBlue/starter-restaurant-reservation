@@ -82,7 +82,7 @@ function ReservationSeat() {
         <br />
         {errorMessage && <p className="error">{errorMessage}</p>}
         <button type="submit">Submit</button>
-        <button onClick={() => history.goBack()} type="cancel">Cancel</button>
+        <button className="btn-danger"onClick={() => history.goBack()} type="cancel">Cancel</button>
       </form>
     </main>
   );
