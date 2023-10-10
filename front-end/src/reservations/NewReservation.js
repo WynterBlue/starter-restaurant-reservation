@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom/";
 import { createReservation } from "../utils/api";
-
+// this is a change
 
 function NewReservation(){
     const history = useHistory()
@@ -53,7 +53,7 @@ function NewReservation(){
                 return
               }
         }
-        
+
         console.log(errorMessage)
         const result = {
             ...formData,
